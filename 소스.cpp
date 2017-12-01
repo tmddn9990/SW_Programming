@@ -147,7 +147,7 @@ int main(void) {
 	_finddatai64_t findFile;
 	FILE *fp;
 	int hFile;
-	char path[] = "*.txt";
+	char path[] = "C:\\dataset/*.txt";
 	char content[10000];
 	char c;
 	int idx, fileNum;
