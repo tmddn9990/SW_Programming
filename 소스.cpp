@@ -104,24 +104,19 @@ void quick_sort1(inform* arr, int left, int right)
 		quick_sort1(arr, j + 1, right);
 	}
 }
-void quick_sort2(inform* arr, int left, int right)
-{
+void quick_sort2(inform* arr, int left, int right){
 	int i, j;
 	inform temp;
 	float pivot = arr[left].density;
-	if (left < right)
-	{
+	if (left < right){
 		i = left;
 		j = right + 1;
-		while (i <= j)
-		{
-			do
-				i++;
+		while (i <= j){
+			do	i++;
 			while (arr[i].density > pivot);
-			do j--;
+			do  j--;
 			while (arr[j].density < pivot);
-			if (i < j)
-			{
+			if (i < j){
 				temp = arr[i];
 				arr[i] = arr[j];
 				arr[j] = temp;
@@ -207,20 +202,21 @@ int main(void) {
 
 	for (int i = 0; i < fileNum; i++)
 	{
-		printf("%4d", i + 1);
-		printf("%20s\t\t", inf[i].name);
-		printf("%d\t\t", inf[i].numOfTarget);
-		printf("%d\t\t", inf[i].length);
-		printf("%15f\t\t\n", inf[i].density);
-	}
+		if (inf[i].numOfTarget > 0) {
+			printf("%4d", i + 1);
+			printf("%20s\t\t", inf[i].name);
+			printf("%d\t\t", inf[i].numOfTarget);
+			printf("%d\t\t", inf[i].length);
+			printf("%15f\t\t\n", inf[i].density);
 
+		}
+	}
 	printf("전체 파일 갯수 : %d\n", fileNum);
 	while (1) {
 		printf("\n\n------------------------모드를 선택하시오.------------------------\n1 - 단어의 횟수 2 - 단어의 빈도 3 - 프로그램 종료\n");
 		scanf("%d", &mode);
 		if (mode == 1)
 		{
-			printf("123123");
 			quick_sort1(inf, 0, fileNum - 1);
 			
 		}
@@ -231,23 +227,25 @@ int main(void) {
 		else if (mode == 3)
 		{
 			printf("프로그램을 종료합니다.\n");
-			break;
+			return 0;
 		}
 		else 
 		{
 			printf("잘못된 입력입니다.\n");
-			break;
+			continue;
 		}
 
 		printf("--------------------------------정렬 결과--------------------------------\n");
 		printf("순위\t파일 이름\t\t\t횟수\t\t파일의 길이\t\t빈도\n");
 		for (int i = 0; i < fileNum; i++)
 		{
-			printf("%4d", i + 1);
-			printf("%20s\t\t", inf[i].name);
-			printf("%d\t\t", inf[i].numOfTarget);
-			printf("%d\t\t", inf[i].length);
-			printf("%15f\t\t\n", inf[i].density);
+			if (inf[i].numOfTarget > 0) {
+				printf("%4d", i + 1);
+				printf("%20s\t\t", inf[i].name);
+				printf("%d\t\t", inf[i].numOfTarget);
+				printf("%d\t\t", inf[i].length);
+				printf("%15f\t\t\n", inf[i].density);
+			}
 		}
 	}
 
