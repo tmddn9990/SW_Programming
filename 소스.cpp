@@ -46,7 +46,7 @@ void getPi(char str[])
 int KMP(char str[], char target[])
 {
 	int ans = 0;
-	int strSize = getSize(str), targetSize=getSize(target),j = 0; 
+	int strSize = getSize(str), targetSize = getSize(target), j = 0;
 	getPi(target);
 	for (int i = 0; i < strSize; i++)
 	{
@@ -72,54 +72,70 @@ void swap(inform* a, inform* b) {
 	*b = tmp;
 }
 
-
-void quick_sort1(inform* array, int start, int end) {
-
-	if (start >= end) return;
-
-	int mid = (start + end) / 2;
-	float pivot = array[mid].numOfTarget;
-
-	swap(&array[start], &array[mid]);
-
-	int p = start + 1, q = end;
-
-	while (1) {
-		while (array[p].numOfTarget >= pivot) { p++; }
-		while (array[q].numOfTarget<pivot) { q--; }
-
-		if (p>q) break;
-
-		swap(&array[p], &array[q]);
+void quick_sort1(inform* arr, int left, int right)
+{
+	int i, j;
+	inform temp;
+	int pivot = arr[left].numOfTarget;
+	if (left < right)
+	{
+		i = left;
+		j = right + 1;
+		while (i <= j)
+		{
+			do
+				i++;
+			while (arr[i].numOfTarget > pivot);
+			do j--;
+			while (arr[j].numOfTarget < pivot);
+			if (i < j)
+			{
+				temp = arr[i];
+				arr[i] = arr[j];
+				arr[j] = temp;
+			}
+			else
+				break;
+		}
+		temp = arr[j];
+		arr[j] = arr[left];
+		arr[left] = temp;
+		quick_sort1(arr, left, j - 1);
+		quick_sort1(arr, j + 1, right);
 	}
-	swap(&array[start], &array[q]);
-	quick_sort1(array, start, q - 1);
-	quick_sort1(array, q + 1, end);
 }
-void quick_sort2(inform* array, int start, int end) {
-
-	if (start >= end) return;
-
-	int mid = (start + end) / 2;
-	float pivot = array[mid].density;
-
-	swap(&array[start], &array[mid]);
-
-	int p = start + 1, q = end;
-
-	while (1) {
-		while (array[p].density >= pivot) { p++; }
-		while (array[q].density<pivot) { q--; }
-
-		if (p>q) break;
-
-		swap(&array[p], &array[q]);
+void quick_sort2(inform* arr, int left, int right)
+{
+	int i, j;
+	inform temp;
+	float pivot = arr[left].density;
+	if (left < right)
+	{
+		i = left;
+		j = right + 1;
+		while (i <= j)
+		{
+			do
+				i++;
+			while (arr[i].density > pivot);
+			do j--;
+			while (arr[j].density < pivot);
+			if (i < j)
+			{
+				temp = arr[i];
+				arr[i] = arr[j];
+				arr[j] = temp;
+			}
+			else
+				break;
+		}
+		temp = arr[j];
+		arr[j] = arr[left];
+		arr[left] = temp;
+		quick_sort2(arr, left, j - 1);
+		quick_sort2(arr, j + 1, right);
 	}
-	swap(&array[start], &array[q]);
-	quick_sort2(array, start, q - 1);
-	quick_sort2(array, q + 1, end);
 }
-
 
 
 inform inf[10000];
@@ -139,9 +155,9 @@ int main(void) {
 	char path[] = "*.txt";
 	char content[10000];
 	char c;
-	int idx,fileNum;
+	int idx, fileNum;
 	int mode;
-	
+
 
 	if ((hFile = _findfirsti64(path, &findFile)) == -1L) {
 		switch (errno) {
@@ -154,16 +170,16 @@ int main(void) {
 		default:
 			printf("알 수 없는 오류입니다.\n"); exit(1); break;
 		}
-	} 
+	}
 	else {
 		printf("--------------------------------파일 목록--------------------------------\n");
 		fileNum = 0;
 		do {
-			
+
 			idx = 0;
-			for(idx=0; findFile.name[idx]!=NULL;idx++)
+			for (idx = 0; findFile.name[idx] != NULL; idx++)
 				inf[fileNum].name[idx] = findFile.name[idx];
-			
+
 			idx = 0;
 
 			fp = fopen(findFile.name, "r");
@@ -184,9 +200,9 @@ int main(void) {
 			fclose(fp);
 			fileNum++;
 		} while (_findnexti64(hFile, &findFile) == 0);
-		_findclose(hFile); 
+		_findclose(hFile);
 
-	} 
+	}
 	printf("순번\t파일 이름\t\t\t횟수\t\t파일의 길이\t\t빈도\n");
 
 	for (int i = 0; i < fileNum; i++)
@@ -200,31 +216,41 @@ int main(void) {
 
 	printf("전체 파일 갯수 : %d\n", fileNum);
 	while (1) {
-		printf("\n\n------------------------모드를 선택하시오.------------------------\n1 - 단어의 횟수 2 - 단어의 빈도\n");
+		printf("\n\n------------------------모드를 선택하시오.------------------------\n1 - 단어의 횟수 2 - 단어의 빈도 3 - 프로그램 종료\n");
 		scanf("%d", &mode);
 		if (mode == 1)
 		{
+			printf("123123");
 			quick_sort1(inf, 0, fileNum - 1);
-			break;
+			
 		}
 		else if (mode == 2)
 		{
 			quick_sort2(inf, 0, fileNum - 1);
+		}
+		else if (mode == 3)
+		{
+			printf("프로그램을 종료합니다.\n");
 			break;
 		}
-		else
+		else 
+		{
 			printf("잘못된 입력입니다.\n");
+			break;
+		}
+
+		printf("--------------------------------정렬 결과--------------------------------\n");
+		printf("순위\t파일 이름\t\t\t횟수\t\t파일의 길이\t\t빈도\n");
+		for (int i = 0; i < fileNum; i++)
+		{
+			printf("%4d", i + 1);
+			printf("%20s\t\t", inf[i].name);
+			printf("%d\t\t", inf[i].numOfTarget);
+			printf("%d\t\t", inf[i].length);
+			printf("%15f\t\t\n", inf[i].density);
+		}
 	}
-	printf("--------------------------------정렬 결과--------------------------------\n");
-	printf("순위\t파일 이름\t\t\t횟수\t\t파일의 길이\t\t빈도\n");
-	for (int i = 0; i < fileNum; i++)
-	{
-		printf("%4d", i + 1);
-		printf("%20s\t\t", inf[i].name);
-		printf("%d\t\t", inf[i].numOfTarget);
-		printf("%d\t\t", inf[i].length);
-		printf("%15f\t\t\n", inf[i].density);
-	}
+
 
 
 
