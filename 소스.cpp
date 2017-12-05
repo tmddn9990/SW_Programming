@@ -1,6 +1,6 @@
 #define _CRT_SECURE_NO_WARNINGS
 #include <stdio.h>
-#include <stdlib.h> 
+//#include <stdlib.h> 
 #include <io.h>
 
 struct inform
@@ -133,7 +133,7 @@ void quick_sort2(inform* arr, int left, int right){
 }
 
 
-inform inf[10000];
+inform inf[1000];
 int main(void) {
 	printf("단어검색 프로그램\n디지털이미징 전공\n20135730\n최승우\n\n");
 	char target[50] = "";
@@ -147,14 +147,17 @@ int main(void) {
 	_finddatai64_t findFile;
 	FILE *fp;
 	int hFile;
-	char path[] = "C:\\dataset/*.txt";
+	char path[] ="C://dataset/";
+	char path2[1000];
+	char path3[1000];
+	sprintf_s(path2, "%s*.txt", path);
 	char content[10000];
 	char c;
-	int idx, fileNum;
-	int mode;
+	int idx, fileNum,targetNum=0;
+	char mode;
 
 
-	if ((hFile = _findfirsti64(path, &findFile)) == -1L) {
+	/*if ((hFile = _findfirsti64(path2, &findFile)) == -1L) {
 		switch (errno) {
 		case 2:
 			printf("파일이 없습니다.\n"); break;
@@ -165,8 +168,9 @@ int main(void) {
 		default:
 			printf("알 수 없는 오류입니다.\n"); exit(1); break;
 		}
-	}
-	else {
+	}*/
+	hFile = _findfirsti64(path2, &findFile);
+	//else {
 		printf("--------------------------------파일 목록--------------------------------\n");
 		fileNum = 0;
 		do {
@@ -176,8 +180,8 @@ int main(void) {
 				inf[fileNum].name[idx] = findFile.name[idx];
 
 			idx = 0;
-
-			fp = fopen(findFile.name, "r");
+			sprintf_s(path3, "C://dataset/%s", findFile.name);
+			fp = fopen(path3, "r");
 			if (fp == NULL)
 			{
 				printf("파일 오픈 불가\n");
@@ -197,12 +201,13 @@ int main(void) {
 		} while (_findnexti64(hFile, &findFile) == 0);
 		_findclose(hFile);
 
-	}
+	//}
 	printf("순번\t파일 이름\t\t\t횟수\t\t파일의 길이\t\t빈도\n");
 
 	for (int i = 0; i < fileNum; i++)
 	{
 		if (inf[i].numOfTarget > 0) {
+			targetNum++;
 			printf("%4d", i + 1);
 			printf("%20s\t\t", inf[i].name);
 			printf("%d\t\t", inf[i].numOfTarget);
@@ -212,19 +217,21 @@ int main(void) {
 		}
 	}
 	printf("전체 파일 갯수 : %d\n", fileNum);
+	printf("찾은 파일 갯수 : %d\n", targetNum);
 	while (1) {
 		printf("\n\n------------------------모드를 선택하시오.------------------------\n1 - 단어의 횟수 2 - 단어의 빈도 3 - 프로그램 종료\n");
-		scanf("%d", &mode);
-		if (mode == 1)
+		getchar();
+		scanf("%c", &mode);
+		if (mode == '1')
 		{
 			quick_sort1(inf, 0, fileNum - 1);
 			
 		}
-		else if (mode == 2)
+		else if (mode == '2')
 		{
 			quick_sort2(inf, 0, fileNum - 1);
 		}
-		else if (mode == 3)
+		else if (mode == '3')
 		{
 			printf("프로그램을 종료합니다.\n");
 			return 0;
@@ -234,19 +241,19 @@ int main(void) {
 			printf("잘못된 입력입니다.\n");
 			continue;
 		}
-
-		printf("--------------------------------정렬 결과--------------------------------\n");
-		printf("순위\t파일 이름\t\t\t횟수\t\t파일의 길이\t\t빈도\n");
-		for (int i = 0; i < fileNum; i++)
-		{
-			if (inf[i].numOfTarget > 0) {
-				printf("%4d", i + 1);
-				printf("%20s\t\t", inf[i].name);
-				printf("%d\t\t", inf[i].numOfTarget);
-				printf("%d\t\t", inf[i].length);
-				printf("%15f\t\t\n", inf[i].density);
+			printf("--------------------------------정렬 결과--------------------------------\n");
+			printf("순위\t파일 이름\t\t\t횟수\t\t파일의 길이\t\t빈도\n");
+			for (int i = 0; i < fileNum; i++)
+			{
+				if (inf[i].numOfTarget > 0) {
+					printf("%4d", i + 1);
+					printf("%20s\t\t", inf[i].name);
+					printf("%d\t\t", inf[i].numOfTarget);
+					printf("%d\t\t", inf[i].length);
+					printf("%15f\t\t\n", inf[i].density);
+				}
 			}
-		}
+		
 	}
 
 
