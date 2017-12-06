@@ -186,6 +186,7 @@ int main(void) {
 			fileNum++;
 		} while (_findnexti64(hFile, &findFile) == 0);
 		_findclose(hFile);
+		free(fp);
 
 	
 	printf("순번\t파일 이름\t\t\t횟수\t\t파일의 길이\t\t빈도\n");
