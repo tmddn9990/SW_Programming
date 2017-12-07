@@ -1,6 +1,5 @@
 #define _CRT_SECURE_NO_WARNINGS
 #include <stdio.h>
-#include <stdlib.h> 
 #include <io.h>
 
 struct inform
@@ -157,22 +156,7 @@ int main(void) {
 	char mode;
 
 
-	if ((hFile = _findfirsti64(path2, &findFile)) == -1L) 
-	{
-		switch (errno) 
-		{
-		case 2:
-		printf("파일이 없습니다.\n"); break;
-		case 22:
-		printf("잘못된 경로입니다.\n"); exit(1); break;
-		case 12:
-		printf("파일 이름이 너무 깁니다.\n"); exit(1); break;
-		default:
-		printf("알 수 없는 오류입니다.\n"); exit(1); break;
-		}
-	}
-	else {
-	printf("--------------------------------파일 목록--------------------------------\n");
+	hFile = _findfirsti64(path2, &findFile);
 	fileNum = 0;
 	do {
 
@@ -195,31 +179,14 @@ int main(void) {
 		}
 		content[idx] = '\0';
 		inf[fileNum].numOfTarget = KMP(content, target);
-		inf[fileNum].length = idx;
+		inf[fileNum].length = getSize(content);
 		inf[fileNum].density = inf[fileNum].numOfTarget / (float)inf[fileNum].length;
 		fclose(fp);
 		fileNum++;
-
 	} while (_findnexti64(hFile, &findFile) == 0);
 	_findclose(hFile);
-	
-	}
-	printf("순번\t파일 이름\t\t\t횟수\t\t파일의 길이\t\t빈도\n");
 
-	for (int i = 0; i < fileNum; i++)
-	{
-		if (inf[i].numOfTarget > 0) {
-			targetNum++;
-			printf("%4d", i + 1);
-			printf("%20s\t\t", inf[i].name);
-			printf("%d\t\t", inf[i].numOfTarget);
-			printf("%d\t\t", inf[i].length);
-			printf("%15f\t\t\n", inf[i].density);
 
-		}
-	}
-	printf("전체 파일 갯수 : %d\n", fileNum);
-	printf("찾은 파일 갯수 : %d\n", targetNum);
 	while (1) {
 		printf("\n\n------------------------모드를 선택하시오.------------------------\n1 - 단어의 횟수 2 - 단어의 빈도 3 - 프로그램 종료\n");
 		getchar();
